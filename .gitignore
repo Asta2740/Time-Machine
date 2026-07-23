@@ -26,3 +26,6 @@ next-env.d.ts
 
 # reference prototype dropped in for inspiration — not part of this project
 /sushi-date-invite Proto/
+
+# reference images dropped in locally — not part of the deliverable
+*.jfif

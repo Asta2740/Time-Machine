@@ -9,6 +9,7 @@ import { downloadIcsFile } from "@/lib/ics";
 import { fireHeartAndSushiConfetti } from "@/lib/confetti";
 import { useSound } from "@/components/ui/SoundProvider";
 import { CalendarHeart } from "lucide-react";
+import { CatMeme } from "@/components/ui/CatMeme";
 
 export function YesScene({ chosenDate, onRestart }: { chosenDate: DateOption; onRestart: () => void }) {
   const hasFired = useRef(false);
@@ -35,6 +36,14 @@ export function YesScene({ chosenDate, onRestart }: { chosenDate: DateOption; on
         </motion.span>
 
         <h2 className="font-serif text-3xl text-rose-800">It&rsquo;s officially a date.</h2>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.15, type: "spring", stiffness: 240, damping: 16 }}
+        >
+          <CatMeme variant="happy" caption="This cat gets it." />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 16, rotate: -2 }}

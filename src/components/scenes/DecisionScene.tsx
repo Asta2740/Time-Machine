@@ -6,6 +6,7 @@ import { SceneCard } from "@/components/ui/SceneCard";
 import { Button } from "@/components/ui/Button";
 import { INVITE_CONFIG, DateOption } from "@/lib/config";
 import { ShieldCheck } from "lucide-react";
+import { CatMeme } from "@/components/ui/CatMeme";
 
 const NO_REACTIONS = [
   "A devastating result for the sushi industry.",
@@ -54,6 +55,14 @@ export function DecisionScene({
         >
           So&hellip; shall I officially reserve your seat?
         </motion.h2>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.25, duration: 0.5, type: "spring", stiffness: 240, damping: 16 }}
+        >
+          <CatMeme variant="happy" caption="Even the cat is rooting for yes." />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}

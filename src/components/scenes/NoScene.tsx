@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { SceneCard } from "@/components/ui/SceneCard";
 import { Button } from "@/components/ui/Button";
+import { CatMeme } from "@/components/ui/CatMeme";
 
 export function NoScene({ onRestart }: { onRestart: () => void }) {
   return (
@@ -27,6 +28,14 @@ export function NoScene({ onRestart }: { onRestart: () => void }) {
         <p className="font-sans text-rose-500/90 text-sm italic">
           I hope we can stay friends.
         </p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <CatMeme variant="sad" caption="He'll recover. Eventually." />
+        </motion.div>
 
         <Button variant="secondary" onClick={onRestart} aria-label="Return to the beginning">
           Back to the beginning

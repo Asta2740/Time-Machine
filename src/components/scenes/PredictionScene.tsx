@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { SceneCard } from "@/components/ui/SceneCard";
 import { Button } from "@/components/ui/Button";
 import { Stamp } from "@/components/ui/Stamp";
+import { CatMeme } from "@/components/ui/CatMeme";
 import { INVITE_CONFIG } from "@/lib/config";
 import { useSound } from "@/components/ui/SoundProvider";
 import { fireCorrectionConfetti } from "@/lib/confetti";
@@ -124,14 +125,13 @@ export function PredictionScene({ onContinue }: { onContinue: () => void }) {
 
         <AnimatePresence>
           {phase === "corrected" && (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-sm italic text-rose-500/80 font-sans"
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.5, type: "spring", stiffness: 240, damping: 16 }}
             >
-              {PUNCHLINE}
-            </motion.p>
+              <CatMeme variant="wizard" caption={PUNCHLINE} />
+            </motion.div>
           )}
         </AnimatePresence>
 
