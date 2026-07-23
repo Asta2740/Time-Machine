@@ -61,7 +61,7 @@ export function DecisionScene({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.25, duration: 0.5, type: "spring", stiffness: 240, damping: 16 }}
         >
-          <CatMeme variant="happy" caption="Even the cat is rooting for yes." />
+          <CatMeme variant="happy2" caption="Even the cat is rooting for yes." />
         </motion.div>
 
         <motion.div
