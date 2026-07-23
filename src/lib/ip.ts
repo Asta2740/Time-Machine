@@ -37,16 +37,3 @@ export function ipForStorage(ip: string | null): {
   const hash = createHash("sha256").update(env.ipHashSalt).update(ip).digest("hex");
   return { ip_hash: hash, ip_full: null };
 }
-
-/** Masks an IP for admin-page display, e.g. 203.0.113.42 -> 203.0.113.xxx */
-export function maskIp(ip: string): string {
-  if (ip.includes(".")) {
-    const parts = ip.split(".");
-    if (parts.length === 4) return `${parts[0]}.${parts[1]}.${parts[2]}.xxx`;
-  }
-  if (ip.includes(":")) {
-    const parts = ip.split(":");
-    return parts.slice(0, 3).join(":") + ":xxxx:xxxx:xxxx:xxxx";
-  }
-  return "hidden";
-}

@@ -1,11 +1,13 @@
 import "server-only";
 import { getSupabaseAdmin } from "./supabaseAdmin";
-import { maskIp } from "./ip";
 import { toCairoTimeString } from "./time";
 import { AdminResponseRow, AdminStats, AdminVisitRow } from "@/types";
 
+// Shows the IP in full whenever STORE_FULL_IP=true populated ip_full — the
+// whole point of enabling that setting is to actually see it in the admin
+// view, not a masked version. Falls back to a hash preview otherwise.
 function displayIp(row: { ip_hash: string | null; ip_full: string | null }): string {
-  if (row.ip_full) return maskIp(row.ip_full);
+  if (row.ip_full) return row.ip_full;
   if (row.ip_hash) return `sha256:${row.ip_hash.slice(0, 12)}…`;
   return "unknown";
 }
