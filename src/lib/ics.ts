@@ -52,12 +52,12 @@ export function buildIcsContent(dateOption: DateOption): string {
     2,
     "0"
   )}Z`;
-  const uid = `sushi-date-${dateOption.isoDate}-${Math.random().toString(36).slice(2)}@invite`;
+  const uid = `sushi-night-${dateOption.isoDate}-${Math.random().toString(36).slice(2)}@invite`;
 
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Sushi Date Invite//EN",
+    "PRODID:-//Sushi Night Invite//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
@@ -83,7 +83,7 @@ export function downloadIcsFile(dateOption: DateOption) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "sushi-date-at-oak-bay.ics";
+  link.download = "sushi-night-at-oak-bay.ics";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

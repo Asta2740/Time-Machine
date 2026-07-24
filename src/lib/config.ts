@@ -36,7 +36,7 @@ export const INVITE_CONFIG = {
   actual: { home: "Spain", away: "Argentina", homeScore: 1, awayScore: 0 },
 
   // ---- Calendar event ---------------------------------------------
-  eventTitle: "Sushi Date at Oak Bay",
+  eventTitle: "Sushi Night at Oak Bay",
   eventDurationMinutes: 120,
 } as const;
 

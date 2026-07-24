@@ -77,7 +77,7 @@ export function RevealScene({ onContinue }: { onContinue: () => void }) {
                 transition={{ delay: 1.6, type: "spring", stiffness: 200, damping: 14 }}
                 className="font-serif text-2xl sm:text-3xl text-rose-800 mt-1 text-glow"
               >
-                You won a sushi date 🍣🌸
+                You won a sushi night away 🍣🌸
               </motion.h2>
 
               <motion.div

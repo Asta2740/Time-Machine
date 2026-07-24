@@ -35,7 +35,7 @@ export function YesScene({ chosenDate, onRestart }: { chosenDate: DateOption; on
           🍣🌸
         </motion.span>
 
-        <h2 className="font-serif text-3xl text-rose-800">It&rsquo;s officially a date.</h2>
+        <h2 className="font-serif text-3xl text-rose-800">It&rsquo;s officially a night away.</h2>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -53,7 +53,7 @@ export function YesScene({ chosenDate, onRestart }: { chosenDate: DateOption; on
         >
           <div className="flex items-center justify-center gap-2 text-rose-500 mb-1">
             <CalendarHeart size={18} aria-hidden="true" />
-            <span className="text-xs font-semibold uppercase tracking-wide">Save the date</span>
+            <span className="text-xs font-semibold uppercase tracking-wide">Save the night</span>
           </div>
           <p className="font-serif text-xl text-rose-800">{chosenDate.label}</p>
           <p className="font-sans text-rose-600">
@@ -67,7 +67,7 @@ export function YesScene({ chosenDate, onRestart }: { chosenDate: DateOption; on
 
         <Button
           onClick={() => downloadIcsFile(chosenDate)}
-          aria-label="Add this date to your calendar"
+          aria-label="Add this to your calendar"
         >
           Add to Calendar
         </Button>

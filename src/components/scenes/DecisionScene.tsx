@@ -119,10 +119,10 @@ export function DecisionScene({
           <Button
             onClick={onYes}
             disabled={submitting}
-            aria-label="Yes, it's a date"
+            aria-label="Yes, I'm in"
             className="w-full text-lg"
           >
-            Yes, it&rsquo;s a date 🍣
+            Yes, I&rsquo;m in 🍣
           </Button>
 
           <motion.div animate={noNudge ? { x: [0, -10, 10, -6, 0] } : { x: 0 }} transition={{ duration: 0.26 }}>

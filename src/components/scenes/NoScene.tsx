@@ -26,7 +26,7 @@ export function NoScene({ onRestart }: { onRestart: () => void }) {
         <p className="font-sans text-rose-600">The sushi shall survive another day.</p>
 
         <p className="font-sans text-rose-500/90 text-sm italic">
-          I hope we can stay friends.
+          No worries — we&rsquo;re still good.
         </p>
 
         <motion.div
