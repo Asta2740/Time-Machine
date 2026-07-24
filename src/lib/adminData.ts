@@ -1,7 +1,9 @@
 import "server-only";
 import { getSupabaseAdmin } from "./supabaseAdmin";
 import { toCairoTimeString } from "./time";
-import { AdminResponseRow, AdminStats, AdminVisitRow } from "@/types";
+import { AdminResponseRow, AdminSessionRow, AdminStats, AdminVisitRow, Scene } from "@/types";
+
+const SCENES: Scene[] = ["opening", "prediction", "reveal", "decision", "yes", "no"];
 
 // Shows the IP in full whenever STORE_FULL_IP=true populated ip_full — the
 // whole point of enabling that setting is to actually see it in the admin
@@ -22,6 +24,7 @@ export async function getAdminStats(): Promise<AdminStats> {
     { data: recentRows },
     { data: recentVisitRows },
     { data: answeredSessionRows },
+    { data: eventRows },
   ] = await Promise.all([
     supabase.from("visits").select("*", { count: "exact", head: true }),
     supabase
@@ -48,6 +51,12 @@ export async function getAdminStats(): Promise<AdminStats> {
       .order("created_at", { ascending: false })
       .limit(50),
     supabase.from("responses").select("session_id").eq("is_test", false),
+    supabase
+      .from("page_events")
+      .select("session_id, scene, created_at")
+      .eq("is_test", false)
+      .order("created_at", { ascending: true })
+      .limit(1000),
   ]);
 
   const answeredSessionIds = new Set((answeredSessionRows ?? []).map((r) => r.session_id));
@@ -76,11 +85,42 @@ export async function getAdminStats(): Promise<AdminStats> {
     answered: answeredSessionIds.has(row.session_id),
   }));
 
+  const sceneFunnel = Object.fromEntries(SCENES.map((s) => [s, 0])) as Record<Scene, number>;
+  const sessionScenes = new Map<string, { scenes: Scene[]; seenScenes: Set<Scene>; lastSeenUtc: string }>();
+
+  for (const row of eventRows ?? []) {
+    const scene = row.scene as Scene;
+    const session: { scenes: Scene[]; seenScenes: Set<Scene>; lastSeenUtc: string } =
+      sessionScenes.get(row.session_id) ?? {
+        scenes: [],
+        seenScenes: new Set<Scene>(),
+        lastSeenUtc: row.created_at,
+      };
+    if (!session.seenScenes.has(scene)) {
+      session.seenScenes.add(scene);
+      session.scenes.push(scene);
+      sceneFunnel[scene] += 1;
+    }
+    session.lastSeenUtc = row.created_at;
+    sessionScenes.set(row.session_id, session);
+  }
+
+  const recentSessions: AdminSessionRow[] = Array.from(sessionScenes.entries())
+    .map(([sessionId, session]) => ({
+      sessionId,
+      scenes: session.scenes,
+      lastSeenUtc: session.lastSeenUtc,
+    }))
+    .sort((a, b) => (a.lastSeenUtc < b.lastSeenUtc ? 1 : -1))
+    .slice(0, 30);
+
   return {
     totalVisits: totalVisits ?? 0,
     yesCount: yesCount ?? 0,
     noCount: noCount ?? 0,
     recent,
     recentVisits,
+    sceneFunnel,
+    recentSessions,
   };
 }

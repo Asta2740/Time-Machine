@@ -21,6 +21,24 @@ export async function logVisit(sessionId: string, test: boolean): Promise<{ csrf
   }
 }
 
+export async function logSceneEvent(params: {
+  sessionId: string;
+  scene: string;
+  csrfToken: string;
+  test: boolean;
+}): Promise<void> {
+  try {
+    await fetch("/api/event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+      keepalive: true,
+    });
+  } catch {
+    // Best-effort — never block navigation on analytics.
+  }
+}
+
 export async function submitResponse(params: {
   answer: Answer;
   sessionId: string;

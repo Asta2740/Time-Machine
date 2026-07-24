@@ -44,11 +44,26 @@ create unique index if not exists responses_session_id_unique
 
 create index if not exists responses_created_at_idx on public.responses (created_at_utc);
 
+-- One row per scene a visitor reaches (opening, prediction, reveal,
+-- decision, yes, no) — lets the admin see how far each session got,
+-- not just whether they answered.
+create table if not exists public.page_events (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid not null,
+  scene text not null check (scene in ('opening', 'prediction', 'reveal', 'decision', 'yes', 'no')),
+  created_at timestamptz not null default now(),
+  is_test boolean not null default false
+);
+
+create index if not exists page_events_created_at_idx on public.page_events (created_at);
+create index if not exists page_events_session_id_idx on public.page_events (session_id);
+
 -- Row Level Security: no client-side access whatsoever. All reads/writes
 -- go through the server using the service role key, which bypasses RLS.
 -- This blocks anon/public API access entirely.
 alter table public.visits enable row level security;
 alter table public.responses enable row level security;
+alter table public.page_events enable row level security;
 
 -- No policies are created intentionally — with RLS enabled and zero
 -- policies, the anon/authenticated roles have no access at all.
@@ -71,5 +86,8 @@ begin
 
   delete from public.responses
     where created_at_utc < now() - (retention_days || ' days')::interval;
+
+  delete from public.page_events
+    where created_at < now() - (retention_days || ' days')::interval;
 end;
 $$;

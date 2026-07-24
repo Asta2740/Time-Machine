@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { AdminStats } from "@/types";
+import { AdminStats, Scene } from "@/types";
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
@@ -11,6 +11,17 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
     </div>
   );
 }
+
+const SCENE_LABELS: Record<Scene, string> = {
+  opening: "Opening",
+  prediction: "Prediction",
+  reveal: "Reveal",
+  decision: "Decision",
+  yes: "Yes",
+  no: "No",
+};
+
+const SCENE_ORDER: Scene[] = ["opening", "prediction", "reveal", "decision", "yes", "no"];
 
 export function AdminDashboard({ stats }: { stats: AdminStats }) {
   const router = useRouter();
@@ -84,6 +95,53 @@ export function AdminDashboard({ stats }: { stats: AdminStats }) {
                 <tr>
                   <td colSpan={7} className="px-3 py-6 text-center text-slate-400">
                     No responses yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="mt-8 mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Funnel — distinct sessions that reached each screen
+        </h2>
+        <div className="flex flex-wrap gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          {SCENE_ORDER.map((scene) => (
+            <div key={scene} className="rounded-lg bg-slate-50 px-3 py-2 text-center">
+              <p className="text-xs uppercase tracking-wide text-slate-400">{SCENE_LABELS[scene]}</p>
+              <p className="text-lg font-semibold text-slate-800">{stats.sceneFunnel[scene]}</p>
+            </div>
+          ))}
+        </div>
+
+        <h2 className="mt-8 mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Session journeys — how far each visitor got, in order
+        </h2>
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+          <table className="min-w-full divide-y divide-slate-200 text-sm">
+            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+              <tr>
+                <th className="px-3 py-2">Session</th>
+                <th className="px-3 py-2">Path</th>
+                <th className="px-3 py-2">Last seen (UTC)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {stats.recentSessions.map((session) => (
+                <tr key={session.sessionId}>
+                  <td className="px-3 py-2 font-mono text-xs text-slate-500">
+                    {session.sessionId.slice(0, 8)}&hellip;
+                  </td>
+                  <td className="px-3 py-2 text-slate-700">
+                    {session.scenes.map((s) => SCENE_LABELS[s]).join(" → ")}
+                  </td>
+                  <td className="px-3 py-2 text-slate-500">{session.lastSeenUtc}</td>
+                </tr>
+              ))}
+              {stats.recentSessions.length === 0 && (
+                <tr>
+                  <td colSpan={3} className="px-3 py-6 text-center text-slate-400">
+                    No page activity recorded yet.
                   </td>
                 </tr>
               )}

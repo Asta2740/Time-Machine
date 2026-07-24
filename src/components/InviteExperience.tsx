@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { INVITE_CONFIG, DateOption } from "@/lib/config";
 import { getOrCreateSessionId } from "@/lib/session";
-import { logVisit, submitResponse } from "@/lib/api";
+import { logVisit, logSceneEvent, submitResponse } from "@/lib/api";
 import { firePetalConfetti } from "@/lib/confetti";
 import { PetalField } from "@/components/ui/PetalField";
 import { PetalCounter } from "@/components/ui/PetalCounter";
@@ -41,6 +41,14 @@ export function InviteExperience() {
       if (result?.csrfToken) setCsrfToken(result.csrfToken);
     });
   }, []);
+
+  // Logs every scene she reaches, not just the final yes/no answer — fires
+  // once csrfToken is ready (covers the initial "opening" scene too) and
+  // again each time the scene actually changes.
+  useEffect(() => {
+    if (!sessionId || !csrfToken) return;
+    logSceneEvent({ sessionId, scene, csrfToken, test: testMode });
+  }, [scene, sessionId, csrfToken, testMode]);
 
   async function finalizeAnswer(answer: Answer) {
     setSubmitting(true);

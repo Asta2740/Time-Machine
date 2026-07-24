@@ -1,5 +1,6 @@
 export type Answer = "yes" | "no";
 export type DeviceCategory = "mobile" | "tablet" | "desktop";
+export type Scene = "opening" | "prediction" | "reveal" | "decision" | "yes" | "no";
 
 export interface RespondRequestBody {
   answer: Answer;
@@ -21,6 +22,16 @@ export interface AdminStats {
   noCount: number;
   recent: AdminResponseRow[];
   recentVisits: AdminVisitRow[];
+  /** Distinct sessions that reached each scene — a simple funnel. */
+  sceneFunnel: Record<Scene, number>;
+  recentSessions: AdminSessionRow[];
+}
+
+/** A visitor's journey, most-recently-active first. */
+export interface AdminSessionRow {
+  sessionId: string;
+  scenes: Scene[];
+  lastSeenUtc: string;
 }
 
 export interface AdminResponseRow {
