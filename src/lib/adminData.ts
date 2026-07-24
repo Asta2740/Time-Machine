@@ -105,7 +105,7 @@ export async function getAdminStats(): Promise<AdminStats> {
     sessionScenes.set(row.session_id, session);
   }
 
-  const recentSessions: AdminSessionRow[] = Array.from(sessionScenes.entries())
+  const topSessions = Array.from(sessionScenes.entries())
     .map(([sessionId, session]) => ({
       sessionId,
       scenes: session.scenes,
@@ -113,6 +113,25 @@ export async function getAdminStats(): Promise<AdminStats> {
     }))
     .sort((a, b) => (a.lastSeenUtc < b.lastSeenUtc ? 1 : -1))
     .slice(0, 30);
+
+  const sessionIps = new Map<string, string>();
+  if (topSessions.length > 0) {
+    const { data: ipRows } = await supabase
+      .from("visits")
+      .select("session_id, ip_hash, ip_full")
+      .in(
+        "session_id",
+        topSessions.map((s) => s.sessionId)
+      );
+    for (const row of ipRows ?? []) {
+      if (!sessionIps.has(row.session_id)) sessionIps.set(row.session_id, displayIp(row));
+    }
+  }
+
+  const recentSessions: AdminSessionRow[] = topSessions.map((s) => ({
+    ...s,
+    ip: sessionIps.get(s.sessionId) ?? "unknown",
+  }));
 
   return {
     totalVisits: totalVisits ?? 0,

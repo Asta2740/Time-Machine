@@ -32,6 +32,7 @@ export interface AdminSessionRow {
   sessionId: string;
   scenes: Scene[];
   lastSeenUtc: string;
+  ip: string;
 }
 
 export interface AdminResponseRow {

@@ -122,6 +122,7 @@ export function AdminDashboard({ stats }: { stats: AdminStats }) {
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
               <tr>
                 <th className="px-3 py-2">Session</th>
+                <th className="px-3 py-2">IP</th>
                 <th className="px-3 py-2">Path</th>
                 <th className="px-3 py-2">Last seen (UTC)</th>
               </tr>
@@ -132,6 +133,7 @@ export function AdminDashboard({ stats }: { stats: AdminStats }) {
                   <td className="px-3 py-2 font-mono text-xs text-slate-500">
                     {session.sessionId.slice(0, 8)}&hellip;
                   </td>
+                  <td className="px-3 py-2 text-slate-500">{session.ip}</td>
                   <td className="px-3 py-2 text-slate-700">
                     {session.scenes.map((s) => SCENE_LABELS[s]).join(" → ")}
                   </td>
@@ -140,7 +142,7 @@ export function AdminDashboard({ stats }: { stats: AdminStats }) {
               ))}
               {stats.recentSessions.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="px-3 py-6 text-center text-slate-400">
+                  <td colSpan={4} className="px-3 py-6 text-center text-slate-400">
                     No page activity recorded yet.
                   </td>
                 </tr>
