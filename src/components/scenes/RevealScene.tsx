@@ -88,7 +88,7 @@ export function RevealScene({ onContinue }: { onContinue: () => void }) {
               >
                 <FlowerDivider />
                 <p className="font-sans text-rose-700 font-medium">
-                  {INVITE_CONFIG.time} &middot; {INVITE_CONFIG.location}
+                  {INVITE_CONFIG.location} &mdash; we&rsquo;ll sort the time out together
                 </p>
                 <p className="mt-2 text-sm text-rose-500/90 font-sans italic">
                   Turns out being wrong has excellent benefits.

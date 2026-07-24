@@ -106,7 +106,7 @@ export function DecisionScene({
             })}
           </div>
           <p className="mt-2 text-sm text-rose-500/80 font-sans">
-            {INVITE_CONFIG.time} &middot; {INVITE_CONFIG.location}
+            {INVITE_CONFIG.location} &mdash; we&rsquo;ll sort the time out together
           </p>
 
           <button

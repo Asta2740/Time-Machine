@@ -19,10 +19,10 @@ export const INVITE_CONFIG = {
   herName: "Rowan" as string, // [HER_NAME]
   myName: "Youssef" as string, // [MY_NAME]
 
-  // ---- Venue & time --------------------------------------------
+  // ---- Venue -----------------------------------------------------
+  // No fixed time — that gets worked out with her directly once she
+  // says yes, so the calendar event is added as an all-day placeholder.
   location: "Oak Bay" as string,
-  time: "7:00 PM" as string, // [TIME]
-  timeLabel: "7:00 PM", // shown in UI, kept separate in case of formatting needs
 
   // ---- Selectable date options -----------------------------------
   // She picks one of these in-page, or opens the calendar to pick any
@@ -40,7 +40,6 @@ export const INVITE_CONFIG = {
 
   // ---- Calendar event ---------------------------------------------
   eventTitle: "Sushi Night at Oak Bay",
-  eventDurationMinutes: 120,
 } as const;
 
 /**

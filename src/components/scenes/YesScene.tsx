@@ -57,7 +57,7 @@ export function YesScene({ chosenDate, onRestart }: { chosenDate: DateOption; on
           </div>
           <p className="font-serif text-xl text-rose-800">{chosenDate.label}</p>
           <p className="font-sans text-rose-600">
-            {INVITE_CONFIG.time} &middot; {INVITE_CONFIG.location}
+            {INVITE_CONFIG.location} &mdash; we&rsquo;ll sort the time out together
           </p>
         </motion.div>
 
