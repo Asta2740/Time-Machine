@@ -7,7 +7,7 @@
 
 export interface DateOption {
   /** Full weekday name, must match the calendar date below. */
-  day: "Saturday" | "Sunday";
+  day: string;
   /** Human-readable date shown in the UI. */
   label: string;
   /** ISO date (YYYY-MM-DD), used for the .ics file and validation. */
@@ -25,10 +25,13 @@ export const INVITE_CONFIG = {
   timeLabel: "7:00 PM", // shown in UI, kept separate in case of formatting needs
 
   // ---- Selectable date options -----------------------------------
-  // She picks one of these in-page. Both are validated below.
+  // She picks one of these in-page, or opens the calendar to pick any
+  // other day if none of these work. All four are validated below.
   dateOptions: [
     { day: "Saturday", label: "Saturday, July 25, 2026", isoDate: "2026-07-25" },
     { day: "Sunday", label: "Sunday, July 26, 2026", isoDate: "2026-07-26" },
+    { day: "Monday", label: "Monday, July 27, 2026", isoDate: "2026-07-27" },
+    { day: "Tuesday", label: "Tuesday, July 28, 2026", isoDate: "2026-07-28" },
   ] as DateOption[],
 
   // ---- The football prediction bit ------------------------------

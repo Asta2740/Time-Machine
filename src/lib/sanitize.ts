@@ -27,6 +27,18 @@ export function sanitizeSessionId(value: unknown): string | null {
   return uuidPattern.test(value) ? value : null;
 }
 
+/** Accepts any real calendar date in YYYY-MM-DD form — she can pick any day, not just the presets. */
+export function sanitizeIsoDate(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  const [, y, m, d] = match;
+  const date = new Date(Number(y), Number(m) - 1, Number(d));
+  const isReal =
+    date.getFullYear() === Number(y) && date.getMonth() === Number(m) - 1 && date.getDate() === Number(d);
+  return isReal ? value : null;
+}
+
 export function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")

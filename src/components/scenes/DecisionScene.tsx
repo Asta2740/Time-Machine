@@ -4,8 +4,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SceneCard } from "@/components/ui/SceneCard";
 import { Button } from "@/components/ui/Button";
+import { Calendar } from "@/components/ui/Calendar";
 import { INVITE_CONFIG, DateOption } from "@/lib/config";
-import { ShieldCheck } from "lucide-react";
+import { buildDateOptionFromDate } from "@/lib/dateOption";
+import { ShieldCheck, CalendarDays } from "lucide-react";
 import { CatMeme } from "@/components/ui/CatMeme";
 
 const NO_REACTIONS = [
@@ -32,6 +34,11 @@ export function DecisionScene({
 }: DecisionSceneProps) {
   const [noClicks, setNoClicks] = useState(0);
   const [noNudge, setNoNudge] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const isPresetSelected = INVITE_CONFIG.dateOptions.some(
+    (option) => option.isoDate === selectedDate.isoDate
+  );
 
   function handleNoClick() {
     if (submitting) return;
@@ -42,6 +49,11 @@ export function DecisionScene({
       return;
     }
     onNo();
+  }
+
+  function handleCalendarSelect(isoDate: string) {
+    const [y, m, d] = isoDate.split("-").map(Number);
+    onSelectDate(buildDateOptionFromDate(new Date(y, m - 1, d)));
   }
 
   return (
@@ -96,6 +108,39 @@ export function DecisionScene({
           <p className="mt-2 text-sm text-rose-500/80 font-sans">
             {INVITE_CONFIG.time} &middot; {INVITE_CONFIG.location}
           </p>
+
+          <button
+            type="button"
+            onClick={() => setShowCalendar((v) => !v)}
+            disabled={submitting}
+            className="mt-3 inline-flex items-center gap-1.5 text-sm text-rose-500 underline underline-offset-2 hover:text-rose-600"
+          >
+            <CalendarDays size={14} aria-hidden="true" />
+            {showCalendar ? "Hide calendar" : "None of these work? Pick another day"}
+          </button>
+
+          <AnimatePresence>
+            {showCalendar && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mt-3 overflow-hidden"
+              >
+                <Calendar
+                  selectedIsoDate={isPresetSelected ? null : selectedDate.isoDate}
+                  onSelect={handleCalendarSelect}
+                  initialMonth={new Date(INVITE_CONFIG.dateOptions[0].isoDate + "T00:00:00")}
+                />
+                {!isPresetSelected && (
+                  <p className="mt-2 text-sm text-rose-600 font-sans">
+                    You picked <span className="font-medium">{selectedDate.label}</span>.
+                  </p>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         <motion.div

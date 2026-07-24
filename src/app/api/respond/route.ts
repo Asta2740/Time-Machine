@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { extractTrustedIp, ipForStorage } from "@/lib/ip";
 import { classifyDevice } from "@/lib/device";
-import { sanitizeAnswer, sanitizeSessionId, sanitizeShortString } from "@/lib/sanitize";
+import { sanitizeAnswer, sanitizeIsoDate, sanitizeSessionId, sanitizeShortString } from "@/lib/sanitize";
 import { verifyCsrfToken } from "@/lib/csrf";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { toCairoTimeString } from "@/lib/time";
-import { INVITE_CONFIG } from "@/lib/config";
 
 export const runtime = "nodejs";
 
@@ -38,9 +37,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "invalid_fields" }, { status: 400 });
   }
 
-  const chosenDateRaw = sanitizeShortString(body.chosenDate, 10);
-  const validDates = INVITE_CONFIG.dateOptions.map((d) => d.isoDate);
-  const chosenDate = chosenDateRaw && validDates.includes(chosenDateRaw) ? chosenDateRaw : null;
+  const chosenDate = sanitizeIsoDate(body.chosenDate);
 
   // Test mode previews the full flow without touching the database.
   if (isTest) {
